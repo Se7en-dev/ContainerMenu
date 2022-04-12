@@ -19,14 +19,16 @@ import { CANCEL } from "bdsx/common";
  * All the fake containers types.
  */
 export enum FakeContainerType {
-    Chest
+    Chest,
+    Hopper,
 }
 
 /**
  * All the containers sizes.
  */
 export enum ContainerSize {
-    Chest = 27
+    Chest = 27,
+    Hopper = 5,
 }
 
 export type ContainerInventory = Record<number, ItemStack>;
@@ -39,7 +41,7 @@ export class FakeContainer {
     private position: BlockPos;
     private block: Block;
     private containerType: ContainerType;
-    private containerSize: number;
+    private containerSize: ContainerSize;
     private inventory: ContainerInventory;
 
     private transactionCallback: TransactionCallback;
