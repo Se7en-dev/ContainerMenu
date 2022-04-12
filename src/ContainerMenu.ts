@@ -1,3 +1,14 @@
+/*
+          _____                    _
+  ___  __|___  |__ _ __         __| | _____   __
+ / __|/ _ \ / / _ \ '_ \ _____ / _` |/ _ \ \ / /
+ \__ \  __// /  __/ | | |_____| (_| |  __/\ V /
+ |___/\___/_/ \___|_| |_|      \__,_|\___| \_/
+
+  ContainerMenu - An API for BDSX that allows you to create fake interactive container menus !
+
+ */
+
 import { FakeContainer } from "./containers/FakeContainer";
 import { ChestContainer } from "./containers/ChestContainer";
 import { ServerPlayer } from "bdsx/bds/player";
@@ -38,8 +49,7 @@ export enum ContainerSize {
     Dispenser = 9,
 }
 
-export type ContainerInventory = Record<number, ItemStack>;
-export type FakeContainerAlias = FakeContainer | FakeDoubleContainer;
+export type ContainerInventory = Record<number, ItemStack>;;
 
 export namespace ContainerMenu {
     /**
@@ -48,7 +58,7 @@ export namespace ContainerMenu {
      * @param player - The player to create the container for.
      * @param container - The container type to create.
      */
-    export function create(player: ServerPlayer, container: FakeContainerType, inventory?: ContainerInventory): FakeContainerAlias {
+    export function create(player: ServerPlayer, container: FakeContainerType, inventory?: ContainerInventory): FakeContainer | FakeDoubleContainer {
         if(!PlayerManager.hasContainer(player.getNetworkIdentifier())) {
             switch(container) {
                 case FakeContainerType.Chest:
