@@ -2,6 +2,7 @@ import { Block } from "bdsx/bds/block";
 import { ContainerType, ItemStack, NetworkItemStackDescriptor } from "bdsx/bds/inventory";
 import { ServerPlayer } from "bdsx/bds/player";
 import {
+    BlockActorDataPacket,
     ContainerClosePacket,
     ContainerOpenPacket,
     InventorySlotPacket,
@@ -14,6 +15,7 @@ import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
 import { PlayerManager } from "../PlayerManager";
 import { Utils } from "../utils/Utils";
 import { CANCEL } from "bdsx/common";
+import { StringTag } from "bdsx/bds/nbt";
 
 /**
  * All the fake containers types.
@@ -43,6 +45,7 @@ export class FakeContainer {
     private containerType: ContainerType;
     private containerSize: ContainerSize;
     private inventory: ContainerInventory;
+    private customName: string;
 
     private transactionCallback: TransactionCallback;
     private containerCloseCallback: ContainerCloseCallback;
@@ -102,6 +105,7 @@ export class FakeContainer {
         PlayerManager.setContainer(this.netId, this);
         this.position = Utils.getBehindPosition(this.netId);
         this.placeContainer();
+        this.sendBlockActorData();
         bedrockServer.serverInstance.nextTick().then(() => {
             this.openContainer();
             this.updateAllItems();
@@ -196,6 +200,32 @@ export class FakeContainer {
      */
     public getContents(): ContainerInventory {
         return this.inventory;
+    }
+
+    /**
+     * Sets a custom name to the container.
+     *
+     * @param name - The name to set.
+     *
+     * @remarks This needs to be set BEFORE sending the container.
+     */
+    public setCustomName(name: string): void {
+        this.customName = name;
+    }
+
+    /**
+     * Sends the container's nbt data to the client.
+     * This is for example used to set a custom name to the container,
+     * or to set the paired chest coordinates in case of a double chest.
+     */
+    private sendBlockActorData(): void {
+        const tag = StringTag.constructWith(this.customName);
+        const pk = BlockActorDataPacket.allocate();
+        pk.pos.set(this.position);
+        pk.data.set("CustomName", tag);
+        pk.sendTo(this.netId);
+        pk.dispose();
+        tag.destruct();
     }
 
     /**
