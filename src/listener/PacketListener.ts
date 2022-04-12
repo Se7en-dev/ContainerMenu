@@ -33,5 +33,9 @@ export namespace PacketListener {
                 container.callContainerCloseCallback();
             }
         });
+
+        events.networkDisconnected.on((netId) => {
+            PlayerManager.getContainer(netId)?.destruct();
+        });
     }
 }

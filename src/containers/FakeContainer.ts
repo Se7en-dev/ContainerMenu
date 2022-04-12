@@ -257,7 +257,7 @@ export class FakeContainer {
     /**
      * Destroys the container, and destructs all the ItemStack instances.
      */
-    private destruct(): void {
+    public destruct(): void {
         this.destroyContainer();
         for(const item of Object.values(this.inventory)) {
             item.destruct();
