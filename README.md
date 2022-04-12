@@ -1,4 +1,4 @@
-<div style="text-align:center"><img src="./resources/containermenu.png" alt="logo" width="512"/></div>
+<div style="text-align:center"><img src="./resources/containermenu.png" alt="logo" width="800"/></div>
 
 # ContainerMenu - A BDSX API
 
@@ -150,7 +150,7 @@ const container = ContainerMenu.create(actor, FakeContainerType.Chest) as FakeCo
 
 ## Credits
 
-API base by @Rjlintkh
+API base by [@Rjlintkh](https://github.com/Rjlintkh/)
 
 This plugin is licensed under **GNU General Public License v3.0**
 
