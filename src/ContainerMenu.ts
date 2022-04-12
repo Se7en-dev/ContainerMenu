@@ -4,6 +4,8 @@ import { ServerPlayer } from "bdsx/bds/player";
 import { PlayerManager } from "./PlayerManager";
 import { PacketListener } from "./listener/PacketListener";
 import { HopperContainer } from "./containers/HopperContainer";
+import { DispenserContainer } from "./containers/DispenserContainer";
+import { DropperContainer } from "./containers/DropperContainer";
 
 PacketListener.loadListeners();
 
@@ -21,6 +23,10 @@ export namespace ContainerMenu {
                     return new ChestContainer(player, inventory);
                 case FakeContainerType.Hopper:
                     return new HopperContainer(player, inventory);
+                case FakeContainerType.Dropper:
+                    return new DropperContainer(player, inventory);
+                case FakeContainerType.Dispenser:
+                    return new DispenserContainer(player, inventory);
             }
         } else throw new Error("Player already has a fake container assigned. Close it before creating a new one.");
     }

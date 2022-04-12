@@ -23,6 +23,8 @@ import { StringTag } from "bdsx/bds/nbt";
 export enum FakeContainerType {
     Chest,
     Hopper,
+    Dropper,
+    Dispenser,
 }
 
 /**
@@ -31,6 +33,8 @@ export enum FakeContainerType {
 export enum ContainerSize {
     Chest = 27,
     Hopper = 5,
+    Dropper = 9,
+    Dispenser = 9,
 }
 
 export type ContainerInventory = Record<number, ItemStack>;
@@ -268,7 +272,7 @@ export class FakeContainer {
      * Calls the container close callback.
      */
     public callContainerCloseCallback(): void {
-        if(this.hasContainerCloseCallback()) return this.containerCloseCallback();
+        if(this.hasContainerCloseCallback()) this.containerCloseCallback();
         this.destruct();
     }
 
