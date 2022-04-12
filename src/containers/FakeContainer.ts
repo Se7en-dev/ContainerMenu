@@ -15,11 +15,16 @@ import { PlayerManager } from "../PlayerManager";
 import { Utils } from "../utils/Utils";
 import { CANCEL } from "bdsx/common";
 
-
+/**
+ * All the fake containers types.
+ */
 export enum FakeContainerType {
     Chest
 }
 
+/**
+ * All the containers sizes.
+ */
 export enum ContainerSize {
     Chest = 27
 }
@@ -49,7 +54,11 @@ export class FakeContainer {
         this.inventory = inventory || {};
     }
 
-    private placeContainer() {
+    /**
+     * Places the container client-side.
+     * This is required in Bedrock edition.
+     */
+    private placeContainer(): void {
         const pk = UpdateBlockPacket.allocate();
         pk.blockPos.construct(this.position);
         pk.dataLayerId = 0;
@@ -59,7 +68,10 @@ export class FakeContainer {
         pk.dispose();
     }
 
-    private openContainer() {
+    /**
+     * Opens the container client-side.
+     */
+    private openContainer(): void {
         const pk = ContainerOpenPacket.allocate();
         pk.containerId = this.containerId;
         pk.type = this.containerType;
@@ -68,7 +80,23 @@ export class FakeContainer {
         pk.dispose();
     }
 
-    public sendToPlayer() {
+    /**
+     * Force-closes the container client-side.
+     *
+     * @remarks This will destruct the container
+     */
+    public forceCloseContainer(): void {
+        const pk = ContainerClosePacket.allocate();
+        pk.containerId = this.containerId;
+        pk.server = true;
+        pk.sendTo(this.netId);
+        pk.dispose();
+    }
+
+    /**
+     * Sends the fake container to the client.
+     */
+    public sendToPlayer(): void {
         PlayerManager.setContainer(this.netId, this);
         this.position = Utils.getBehindPosition(this.netId);
         this.placeContainer();
@@ -78,41 +106,15 @@ export class FakeContainer {
         });
     }
 
-    public forceCloseContainer(): void {
-        const pk = ContainerClosePacket.allocate();
-        pk.containerId = this.containerId;
-        pk.server = true;
-        pk.sendTo(this.netId);
-        pk.dispose();
-    }
-
-    public onTransaction(callback: TransactionCallback): void {
-        this.transactionCallback = callback;
-    }
-
-    private hasTransactionCallback(): boolean {
-        return this.transactionCallback !== undefined;
-    }
-
-    public callTransactionCallback(action: ItemStackRequestActionTransferBase): void | CANCEL {
-        if(this.hasTransactionCallback()) return this.transactionCallback(action);
-    }
-
-    public onContainerClose(callback: ContainerCloseCallback): void {
-        this.containerCloseCallback = callback;
-    }
-
-    private hasContainerCloseCallback(): boolean {
-        return this.containerCloseCallback !== undefined;
-    }
-
-    public callContainerCloseCallback(): void {
-        if(this.hasContainerCloseCallback()) return this.containerCloseCallback();
-        this.destruct();
-    }
-
-
-    public setItem(slot: number, item: ItemStack) {
+    /**
+     * Sets an item in the container.
+     *
+     * @param slot - The slot to set the item in.
+     * @param item - The item to set.
+     *
+     * @remarks This will update the item client-side if needed to.
+     */
+    public setItem(slot: number, item: ItemStack): void {
         if(slot < 0 || slot >= this.containerSize) {
             throw new Error(`Slot ${slot} is out of range (container has ${this.containerSize} slots)`);
         }
@@ -124,12 +126,34 @@ export class FakeContainer {
         }
     }
 
-    private updateAllItems(): void {
-        for (let [slot, item] of Object.entries(this.inventory)) {
-            this.updateItem(+slot, item);
+    /**
+     * Sets the container's inventory contents.
+     *
+     * @param contents - The contents to set.
+     */
+    public setContents(contents: ContainerInventory): void {
+        for(const [slot, item] of Object.entries(contents)) {
+            this.setItem(+slot, item);
         }
     }
 
+    /**
+     * Adds an item to the container
+     *
+     * @param item - The item to add.
+     */
+    public addItem(item: ItemStack): void {
+        for(let i = 0; i < this.containerSize; i++) {
+            if(!this.inventory[i]) {
+                this.setItem(i, item);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Updates a single item in the container's inventory client-side.
+     */
     private updateItem(slot: number, item: ItemStack): void {
         if(slot < 0 || slot >= this.containerSize) {
             throw new Error(`Slot ${slot} is out of range (container has ${this.containerSize} slots)`);
@@ -144,21 +168,20 @@ export class FakeContainer {
         pk.dispose();
     }
 
-    public addItem(item: ItemStack) {
-        for(let i = 0; i < this.containerSize; i++) {
-            if(!this.inventory[i]) {
-                this.setItem(i, item);
-                return;
-            }
+    /**
+     * Updates the container's inventory client-side.
+     */
+    private updateAllItems(): void {
+        for (let [slot, item] of Object.entries(this.inventory)) {
+            this.updateItem(+slot, item);
         }
     }
 
-    public setContents(contents: ContainerInventory) {
-        for(const [slot, item] of Object.entries(contents)) {
-            this.setItem(+slot, item);
-        }
-    }
-
+    /**
+     * Returns the item at the specified slot.
+     *
+     * @param slot - The slot to get the item from.
+     */
     public getItem(slot: number): ItemStack | undefined {
         if(slot < 0 || slot >= this.containerSize) {
             throw new Error(`Slot ${slot} is out of range (container has ${this.containerSize} slots)`);
@@ -166,11 +189,62 @@ export class FakeContainer {
         return this.inventory[slot];
     }
 
+    /**
+     * Returns the contents of the container.
+     */
     public getContents(): ContainerInventory {
         return this.inventory;
     }
 
-    private destroyContainer() {
+    /**
+     * Callback is triggered when the player interacts with an item,
+     * in the container, or in it's inventory.
+     */
+    public onTransaction(callback: TransactionCallback): void {
+        this.transactionCallback = callback;
+    }
+
+    /**
+     * Returns whether a transaction callback is set.
+     */
+    private hasTransactionCallback(): boolean {
+        return this.transactionCallback !== undefined;
+    }
+
+    /**
+     * Calls the transaction callback.
+     */
+    public callTransactionCallback(action: ItemStackRequestActionTransferBase): void | CANCEL {
+        if(this.hasTransactionCallback()) return this.transactionCallback(action);
+    }
+
+    /**
+     * Callback is triggered when the player closes the container, or is forced to do so.
+     */
+    public onContainerClose(callback: ContainerCloseCallback): void {
+        this.containerCloseCallback = callback;
+    }
+
+    /**
+     * Returns whether a container close callback is set.
+     */
+    private hasContainerCloseCallback(): boolean {
+        return this.containerCloseCallback !== undefined;
+    }
+
+    /**
+     * Calls the container close callback.
+     */
+    public callContainerCloseCallback(): void {
+        if(this.hasContainerCloseCallback()) return this.containerCloseCallback();
+        this.destruct();
+    }
+
+    /**
+     * Destroys the container client-side,
+     * and replaces it with the original block.
+     */
+    private destroyContainer(): void {
         const pk = UpdateBlockPacket.allocate();
         pk.blockPos.construct(this.position);
         pk.dataLayerId = 0;
@@ -180,7 +254,10 @@ export class FakeContainer {
         pk.dispose();
     }
 
-    private destruct() {
+    /**
+     * Destroys the container, and destructs all the ItemStack instances.
+     */
+    private destruct(): void {
         this.destroyContainer();
         for(const item of Object.values(this.inventory)) {
             item.destruct();
