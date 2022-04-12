@@ -16,28 +16,8 @@ import { PlayerManager } from "../PlayerManager";
 import { Utils } from "../utils/Utils";
 import { CANCEL } from "bdsx/common";
 import { StringTag } from "bdsx/bds/nbt";
+import { ContainerInventory, ContainerSize } from "../ContainerMenu";
 
-/**
- * All the fake containers types.
- */
-export enum FakeContainerType {
-    Chest,
-    Hopper,
-    Dropper,
-    Dispenser,
-}
-
-/**
- * All the containers sizes.
- */
-export enum ContainerSize {
-    Chest = 27,
-    Hopper = 5,
-    Dropper = 9,
-    Dispenser = 9,
-}
-
-export type ContainerInventory = Record<number, ItemStack>;
 type TransactionCallback = (action: ItemStackRequestActionTransferBase) => void | CANCEL;
 type ContainerCloseCallback = () => void;
 

@@ -1,4 +1,4 @@
-import { ContainerInventory, FakeContainer, FakeContainerType } from "./containers/FakeContainer";
+import { FakeContainer } from "./containers/FakeContainer";
 import { ChestContainer } from "./containers/ChestContainer";
 import { ServerPlayer } from "bdsx/bds/player";
 import { PlayerManager } from "./PlayerManager";
@@ -6,8 +6,31 @@ import { PacketListener } from "./listener/PacketListener";
 import { HopperContainer } from "./containers/HopperContainer";
 import { DispenserContainer } from "./containers/DispenserContainer";
 import { DropperContainer } from "./containers/DropperContainer";
+import { ItemStack } from "bdsx/bds/inventory";
 
 PacketListener.loadListeners();
+
+/**
+ * All the fake containers types.
+ */
+export enum FakeContainerType {
+    Chest,
+    Hopper,
+    Dropper,
+    Dispenser,
+}
+
+/**
+ * All the containers sizes.
+ */
+export enum ContainerSize {
+    Chest = 27,
+    Hopper = 5,
+    Dropper = 9,
+    Dispenser = 9,
+}
+
+export type ContainerInventory = Record<number, ItemStack>;
 
 export namespace ContainerMenu {
     /**

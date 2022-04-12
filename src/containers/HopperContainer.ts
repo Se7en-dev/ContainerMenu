@@ -1,7 +1,8 @@
-import { ContainerInventory, ContainerSize, FakeContainer } from "./FakeContainer";
 import { ServerPlayer } from "bdsx/bds/player";
 import { Block } from "bdsx/bds/block";
 import { ContainerType } from "bdsx/bds/inventory";
+import { FakeContainer } from "./FakeContainer";
+import { ContainerInventory, ContainerSize } from "../ContainerMenu";
 
 export class HopperContainer extends FakeContainer {
     public constructor(player: ServerPlayer, inventory?: ContainerInventory) {
