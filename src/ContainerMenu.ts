@@ -7,6 +7,8 @@ import { HopperContainer } from "./containers/HopperContainer";
 import { DispenserContainer } from "./containers/DispenserContainer";
 import { DropperContainer } from "./containers/DropperContainer";
 import { ItemStack } from "bdsx/bds/inventory";
+import { DoubleChestContainer } from "./containers/DoubleChestContainer";
+import { FakeDoubleContainer } from "./containers/FakeDoubleContainer";
 
 PacketListener.loadListeners();
 
@@ -15,6 +17,7 @@ PacketListener.loadListeners();
  */
 export enum FakeContainerType {
     Chest,
+    DoubleChest,
     Hopper,
     Dropper,
     Dispenser,
@@ -25,12 +28,14 @@ export enum FakeContainerType {
  */
 export enum ContainerSize {
     Chest = 27,
+    DoubleChest = 54,
     Hopper = 5,
     Dropper = 9,
     Dispenser = 9,
 }
 
 export type ContainerInventory = Record<number, ItemStack>;
+export type FakeContainerAlias = FakeContainer | FakeDoubleContainer;
 
 export namespace ContainerMenu {
     /**
@@ -39,11 +44,13 @@ export namespace ContainerMenu {
      * @param player - The player to create the container for.
      * @param container - The container type to create.
      */
-    export function create(player: ServerPlayer, container: FakeContainerType, inventory?: ContainerInventory): FakeContainer {
+    export function create(player: ServerPlayer, container: FakeContainerType, inventory?: ContainerInventory): FakeContainerAlias {
         if(!PlayerManager.hasContainer(player.getNetworkIdentifier())) {
             switch(container) {
                 case FakeContainerType.Chest:
                     return new ChestContainer(player, inventory);
+                case FakeContainerType.DoubleChest:
+                    return new DoubleChestContainer(player, inventory);
                 case FakeContainerType.Hopper:
                     return new HopperContainer(player, inventory);
                 case FakeContainerType.Dropper:
