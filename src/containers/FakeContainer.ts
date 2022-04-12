@@ -107,7 +107,7 @@ export class FakeContainer {
      */
     public sendToPlayer(): void {
         PlayerManager.setContainer(this.netId, this);
-        this.position = Utils.getBehindPosition(this.netId);
+        this.position = Utils.getAbovePosition(this.netId);
         this.placeContainer();
         this.sendBlockActorData();
         bedrockServer.serverInstance.nextTick().then(() => {

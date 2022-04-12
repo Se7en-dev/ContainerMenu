@@ -4,11 +4,15 @@ import { Block } from "bdsx/bds/block";
 
 export namespace Utils {
     /**
-     * TODO: return the correct position, not feet pos.
+     * Returns the position above the player's head.
+     *
+     * @param netId - The network identifier of the player.
      */
-    export function getBehindPosition(netId: NetworkIdentifier): BlockPos {
+    export function getAbovePosition(netId: NetworkIdentifier): BlockPos {
         const actor = netId.getActor()!;
-        return BlockPos.create(actor.getFeetPos());
+        const pos = actor.getPosition();
+        pos.y += 2;
+        return BlockPos.create(pos);
     }
 
     /**
