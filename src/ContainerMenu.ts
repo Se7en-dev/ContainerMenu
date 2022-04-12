@@ -9,6 +9,8 @@ import { DropperContainer } from "./containers/DropperContainer";
 import { ItemStack } from "bdsx/bds/inventory";
 import { DoubleChestContainer } from "./containers/DoubleChestContainer";
 import { FakeDoubleContainer } from "./containers/FakeDoubleContainer";
+import { TrappedChestContainer } from "./containers/TrappedChestContainer";
+import { DoubleTrappedChestContainer } from "./containers/DoubleTrappedChestContainer";
 
 PacketListener.loadListeners();
 
@@ -17,7 +19,9 @@ PacketListener.loadListeners();
  */
 export enum FakeContainerType {
     Chest,
+    TrappedChest,
     DoubleChest,
+    DoubleTrappedChest,
     Hopper,
     Dropper,
     Dispenser,
@@ -49,8 +53,12 @@ export namespace ContainerMenu {
             switch(container) {
                 case FakeContainerType.Chest:
                     return new ChestContainer(player, inventory);
+                case FakeContainerType.TrappedChest:
+                    return new TrappedChestContainer(player, inventory);
                 case FakeContainerType.DoubleChest:
                     return new DoubleChestContainer(player, inventory);
+                case FakeContainerType.DoubleTrappedChest:
+                    return new DoubleTrappedChestContainer(player, inventory);
                 case FakeContainerType.Hopper:
                     return new HopperContainer(player, inventory);
                 case FakeContainerType.Dropper:
