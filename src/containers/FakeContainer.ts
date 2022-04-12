@@ -94,7 +94,7 @@ export class FakeContainer {
      *
      * @remarks This will destruct the container
      */
-    public forceCloseContainer(): void {
+    public closeContainer(): void {
         const pk = ContainerClosePacket.allocate();
         pk.containerId = this.containerId;
         pk.server = true;
