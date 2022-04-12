@@ -89,7 +89,7 @@ export class FakeContainer {
         PlayerManager.setContainer(this.netId, this);
         this.position = Utils.getAbovePosition(this.netId);
         this.placeContainer();
-        this.sendBlockActorData();
+        if(this.customName) this.sendCustomName();
         bedrockServer.serverInstance.nextTick().then(() => {
             this.openContainer();
             this.updateAllItems();
@@ -198,11 +198,9 @@ export class FakeContainer {
     }
 
     /**
-     * Sends the container's nbt data to the client.
-     * This is for example used to set a custom name to the container,
-     * or to set the paired chest coordinates in case of a double chest.
+     * Sends the container's custom name to the client.
      */
-    private sendBlockActorData(): void {
+    private sendCustomName(): void {
         const tag = StringTag.constructWith(this.customName);
         const pk = BlockActorDataPacket.allocate();
         pk.pos.set(this.position);
