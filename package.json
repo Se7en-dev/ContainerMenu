@@ -1,6 +1,6 @@
 {
   "name": "@bdsx/containermenu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ContainerMenu - An API allowing you to create fake container menus.",
   "main": "./src/ContainerMenu.js",
   "keywords": ["bdsx", "api", "fake chest", "container", "inventory", "menu", "invmenu"],
