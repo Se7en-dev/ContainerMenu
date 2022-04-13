@@ -75,7 +75,7 @@ container.sendToPlayer();
 
 *everything else is handled automatically !*
 
-You can add items to the container this way :
+You can add/delete items to the container this way :
 
 ```ts
 // Sets the item in slot 0
@@ -88,6 +88,10 @@ container.setContents({
             7: ItemStack.constructWith("minecraft:iron_ingot", 1),
             9: ItemStack.constructWith("minecraft:emerald", 1),
         });
+// Clears the item in slot 5
+container.clearItem(5);
+// Clears all items
+container.clearContents();
 ```
 
 *no need to destruct the ItemStacks, it is done automatically after the container is closed*
