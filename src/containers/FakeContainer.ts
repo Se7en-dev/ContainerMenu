@@ -187,6 +187,34 @@ export class FakeContainer {
     }
 
     /**
+     * Clears a container's slot,
+     * updating it client-side if needed.
+     */
+    public clearItem(slot: number): void {
+        if(slot < 0 || slot >= this.containerSize) {
+            throw new Error(`Slot ${slot} is out of range (container has ${this.containerSize} slots)`);
+        }
+        if(this.inventory[slot]) {
+            this.inventory[slot].destruct();
+            delete this.inventory[slot];
+            // If the container is not sent yet, no need to update the slot.
+            if(PlayerManager.hasContainer(this.netId)) {
+                this.updateItem(slot, ItemStack.EMPTY_ITEM);
+            }
+        }
+    }
+
+    /**
+     * Clears the container's contents,
+     * updating it client-side if needed.
+     */
+    public clearContents(): void {
+        for(const [slot, item] of Object.entries(this.inventory)) {
+            this.clearItem(+slot);
+        }
+    }
+
+    /**
      * Sets a custom name to the container.
      *
      * @param name - The name to set.
