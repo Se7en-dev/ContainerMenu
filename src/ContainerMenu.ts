@@ -19,7 +19,6 @@ import { DispenserContainer } from "./containers/DispenserContainer";
 import { DropperContainer } from "./containers/DropperContainer";
 import { ItemStack } from "bdsx/bds/inventory";
 import { DoubleChestContainer } from "./containers/DoubleChestContainer";
-import { FakeDoubleContainer } from "./containers/FakeDoubleContainer";
 import { TrappedChestContainer } from "./containers/TrappedChestContainer";
 import { DoubleTrappedChestContainer } from "./containers/DoubleTrappedChestContainer";
 
@@ -57,24 +56,26 @@ export namespace ContainerMenu {
      *
      * @param player - The player to create the container for.
      * @param container - The container type to create.
+     * @param destructItems - Whether the ItemStacks should be automatically destructed.
+     * @param inventory - The inventory of the container.
      */
-    export function create(player: ServerPlayer, container: FakeContainerType, inventory?: ContainerInventory): FakeContainer | FakeDoubleContainer {
+    export function create(player: ServerPlayer, container: FakeContainerType, destructItems?: boolean, inventory?: ContainerInventory): FakeContainer {
         if(!PlayerManager.hasContainer(player.getNetworkIdentifier())) {
             switch(container) {
                 case FakeContainerType.Chest:
-                    return new ChestContainer(player, inventory);
+                    return new ChestContainer(player, destructItems, inventory);
                 case FakeContainerType.TrappedChest:
-                    return new TrappedChestContainer(player, inventory);
+                    return new TrappedChestContainer(player, destructItems, inventory);
                 case FakeContainerType.DoubleChest:
-                    return new DoubleChestContainer(player, inventory);
+                    return new DoubleChestContainer(player, destructItems, inventory);
                 case FakeContainerType.DoubleTrappedChest:
-                    return new DoubleTrappedChestContainer(player, inventory);
+                    return new DoubleTrappedChestContainer(player, destructItems, inventory);
                 case FakeContainerType.Hopper:
-                    return new HopperContainer(player, inventory);
+                    return new HopperContainer(player, destructItems, inventory);
                 case FakeContainerType.Dropper:
-                    return new DropperContainer(player, inventory);
+                    return new DropperContainer(player, destructItems, inventory);
                 case FakeContainerType.Dispenser:
-                    return new DispenserContainer(player, inventory);
+                    return new DispenserContainer(player, destructItems, inventory);
             }
         } else throw new Error("Player already has a fake container assigned. Close it before creating a new one.");
     }

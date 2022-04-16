@@ -1,22 +1,17 @@
 import { Block } from "bdsx/bds/block";
 import { ContainerType } from "bdsx/bds/inventory";
 import { ServerPlayer } from "bdsx/bds/player";
-import { BlockPos } from "bdsx/bds/blockpos";
 import { ContainerInventory, ContainerSize } from "../ContainerMenu";
-import { BlockActorDataPacket, UpdateBlockPacket } from "bdsx/bds/packets";
-import { PlayerManager } from "../PlayerManager";
-import { Utils } from "../utils/Utils";
-import { bedrockServer } from "bdsx/launcher";
-import { ByteTag, IntTag, StringTag } from "bdsx/bds/nbt";
 import { FakeDoubleContainer } from "./FakeDoubleContainer";
 
 export class DoubleChestContainer extends FakeDoubleContainer {
-    public constructor(player: ServerPlayer, inventory?: ContainerInventory) {
+    public constructor(player: ServerPlayer, destructItems?: boolean, inventory?: ContainerInventory) {
         super(
             Block.create("minecraft:chest")!,
             ContainerType.Container,
             ContainerSize.DoubleChest,
             player,
+            destructItems,
             inventory
         );
     }

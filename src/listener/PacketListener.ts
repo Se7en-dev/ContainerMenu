@@ -2,7 +2,7 @@ import { events } from "bdsx/event";
 import { MinecraftPacketIds } from "bdsx/bds/packetids";
 import { PlayerManager } from "../PlayerManager";
 import { CANCEL } from "bdsx/common";
-import { ItemStackRequestActionTransferBase, ItemStackRequestActionType } from "bdsx/bds/packets";
+import { ItemStackRequestActionTransferBase } from "bdsx/bds/packets";
 
 export namespace PacketListener {
 

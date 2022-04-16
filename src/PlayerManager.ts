@@ -1,12 +1,11 @@
 import { FakeContainer } from "./containers/FakeContainer";
 import { NetworkIdentifier } from "bdsx/bds/networkidentifier";
-import { FakeDoubleContainer } from "./containers/FakeDoubleContainer";
 
 
 export namespace PlayerManager {
-    let playerContainerMap: Map<NetworkIdentifier, FakeContainer | FakeDoubleContainer> = new Map();
+    let playerContainerMap: Map<NetworkIdentifier, FakeContainer> = new Map();
 
-    export function setContainer(player: NetworkIdentifier, container: FakeContainer | FakeDoubleContainer): void {
+    export function setContainer(player: NetworkIdentifier, container: FakeContainer): void {
         playerContainerMap.set(player, container);
     }
 
@@ -14,7 +13,7 @@ export namespace PlayerManager {
         playerContainerMap.delete(player);
     }
 
-    export function getContainer(player: NetworkIdentifier): FakeContainer | FakeDoubleContainer | undefined {
+    export function getContainer(player: NetworkIdentifier): FakeContainer | undefined {
         return playerContainerMap.get(player);
     }
 
