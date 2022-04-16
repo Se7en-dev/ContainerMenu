@@ -103,14 +103,16 @@ export class FakeContainer {
      *
      * @param slot - The slot to set the item in.
      * @param item - The item to set.
+     * @param destructOld - Whether to destroy the old item.
+     *
      *
      * @remarks This will update the item client-side if needed to.
      */
-    public setItem(slot: number, item: ItemStack): void {
+    public setItem(slot: number, item: ItemStack, destructOld: boolean = this.destructItems): void {
         if(slot < 0 || slot >= this.containerSize) {
             throw new Error(`Slot ${slot} is out of range (container has ${this.containerSize} slots)`);
         }
-        if (this.inventory[slot] !== undefined && !this.inventory[slot]?.sameItem(item) && this.destructItems) this.inventory[slot].destruct();
+        if (this.inventory[slot] !== undefined && !this.inventory[slot]?.sameItem(item) && destructOld) this.inventory[slot].destruct();
         this.inventory[slot] = item;
         // If the container is not sent yet, no need to update the slot.
         if(PlayerManager.hasContainer(this.netId)) {
@@ -122,10 +124,11 @@ export class FakeContainer {
      * Sets the container's inventory contents.
      *
      * @param contents - The contents to set.
+     * @param destructOld - Whether to destroy the old items.
      */
-    public setContents(contents: ContainerInventory): void {
+    public setContents(contents: ContainerInventory, destructOld: boolean = this.destructItems): void {
         for(const [slot, item] of Object.entries(contents)) {
-            this.setItem(+slot, item);
+            this.setItem(+slot, item, destructOld);
         }
     }
 
@@ -192,12 +195,12 @@ export class FakeContainer {
      * Clears a container's slot,
      * updating it client-side if needed.
      */
-    public clearItem(slot: number): void {
+    public clearItem(slot: number, destructItem: boolean = this.destructItems): void {
         if(slot < 0 || slot >= this.containerSize) {
             throw new Error(`Slot ${slot} is out of range (container has ${this.containerSize} slots)`);
         }
         if(this.inventory[slot]) {
-            if(this.destructItems) this.inventory[slot].destruct();
+            if(destructItem) this.inventory[slot].destruct();
             delete this.inventory[slot];
             // If the container is not sent yet, no need to update the slot.
             if(PlayerManager.hasContainer(this.netId)) {
@@ -210,9 +213,9 @@ export class FakeContainer {
      * Clears the container's contents,
      * updating it client-side if needed.
      */
-    public clearContents(): void {
+    public clearContents(destructItems: boolean = this.destructItems): void {
         for(const [slot, item] of Object.entries(this.inventory)) {
-            this.clearItem(+slot);
+            this.clearItem(+slot, destructItems);
         }
     }
 
