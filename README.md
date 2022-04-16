@@ -110,7 +110,7 @@ Using callbacks :
 
 ```ts
 container.onTransaction((action) => {
-    // Do something here...
+    // Do something here...
 });
 
 container.onContainerClose(() => {
@@ -120,14 +120,12 @@ container.onContainerClose(() => {
 
 *nb: returning `CANCEL` for item transactions does not change anything for now. In the future, Items will be able to be placed and taken unless `CANCEL` is returned.*
 
-
-
 ##### Simple examples
 
 Sends a message when a diamond is clicked :
 
 ```ts
-const container = ContainerMenu.create(actor, FakeContainerType.Chest) as FakeContainer;
+const container = ContainerMenu.create(actor, FakeContainerType.Chest);
         container.addItem(ItemStack.constructWith("minecraft:iron_ingot", 1));
         container.addItem(ItemStack.constructWith("minecraft:gold_ingot", 1));
         container.addItem(ItemStack.constructWith("minecraft:diamond", 1));
@@ -143,7 +141,7 @@ const container = ContainerMenu.create(actor, FakeContainerType.Chest) as FakeCo
 Sends a message when the player closes the container:
 
 ```ts
-const container = ContainerMenu.create(actor, FakeContainerType.Chest) as FakeContainer;
+const container = ContainerMenu.create(actor, FakeContainerType.Chest);
         container.sendToPlayer();
         container.onContainerClose(() => {
             actor.sendMessage("Container closed !");
@@ -159,5 +157,3 @@ API base by [@Rjlintkh](https://github.com/Rjlintkh/)
 This plugin is licensed under **GNU General Public License v3.0**
 
 Feel free to contribute :)
-
-
