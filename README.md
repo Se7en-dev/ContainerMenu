@@ -120,26 +120,6 @@ container.onContainerClose(() => {
 
 *nb: returning `CANCEL` for item transactions does not change anything for now. In the future, Items will be able to be placed and taken unless `CANCEL` is returned.*
 
-Item destruction :
-
-When creating a fake container, if `destructItems` is set to true, items will be automatically destructed on container close. If set to false they won't, and need to be destructed manually (if needed to).
-```ts
-// The items will not be destructed when the container is closed
-const container = ContainerMenu.create(actor, FakeContainerType.DoubleChest, false);
-```
-This parameter can be overriden when calling item-related methods :
-```ts
-// The old item at slot 0 will not be destructed (destructItems is set to false)
-container.setItem(0, ItemStack.constructWith("minecraft:diamond", 1));
-// The old item at slot 0 will be destructed (destructItems is overriden to true)
-container.setItem(0, ItemStack.constructWith("minecraft:diamond", 1), true);
-```
-All items can be destructed at once :
-```ts
-// This is called automatically if destructItems is set to true
-container.destructAllItems();
-```
-
 ##### Simple examples
 
 Sends a message when a diamond is clicked :
@@ -166,6 +146,27 @@ const container = ContainerMenu.create(actor, FakeContainerType.Chest);
         container.onContainerClose(() => {
             actor.sendMessage("Container closed !");
         });
+```
+
+#### Advanced usage
+Item destruction :
+
+When creating a fake container, if `destructItems` is set to true, items will be automatically destructed on container close. If set to false they won't, and need to be destructed manually (if needed to).
+```ts
+// The items will not be destructed when the container is closed
+const container = ContainerMenu.create(actor, FakeContainerType.DoubleChest, false);
+```
+This parameter can be overriden when calling item-related methods :
+```ts
+// The old item at slot 0 will not be destructed (destructItems is set to false)
+container.setItem(0, ItemStack.constructWith("minecraft:diamond", 1));
+// The old item at slot 0 will be destructed (destructItems is overriden to true)
+container.setItem(0, ItemStack.constructWith("minecraft:diamond", 1), true);
+```
+All items can be destructed at once :
+```ts
+// This is called automatically if destructItems is set to true
+container.destructAllItems();
 ```
 
 ---
