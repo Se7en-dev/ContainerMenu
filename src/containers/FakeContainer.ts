@@ -17,6 +17,7 @@ import { Utils } from "../utils/Utils";
 import { CANCEL } from "bdsx/common";
 import { StringTag } from "bdsx/bds/nbt";
 import { ContainerInventory, ContainerSize } from "../ContainerMenu";
+import { NativeType } from "bdsx/nativetype";
 
 type TransactionCallback = (action: ItemStackRequestActionTransferBase) => void | CANCEL;
 type ContainerCloseCallback = () => void;
@@ -157,7 +158,8 @@ export class FakeContainer {
         pk.containerId = this.containerId;
         pk.slot = slot;
         const descriptor = NetworkItemStackDescriptor.constructWith(item);
-        pk.descriptor.construct(descriptor);
+        pk.descriptor.destruct();
+        pk.descriptor[NativeType.ctor_move](descriptor);
         pk.sendTo(this.netId);
         descriptor.destruct();
         pk.dispose();
