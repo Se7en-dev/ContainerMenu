@@ -48,7 +48,7 @@ export enum ContainerSize {
     Dispenser = 9,
 }
 
-export type ContainerInventory = Record<number, ItemStack>;;
+export type ContainerInventory = Record<number, ItemStack>;
 
 export namespace ContainerMenu {
     /**
