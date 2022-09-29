@@ -23,15 +23,15 @@ type TransactionCallback = (action: ItemStackRequestActionTransferBase) => void 
 type ContainerCloseCallback = () => void;
 
 export class FakeContainer {
-    protected netId: NetworkIdentifier;
-    private containerId: number;
+    protected readonly netId: NetworkIdentifier;
+    private readonly containerId: number;
     protected position: BlockPos;
-    private block: Block;
-    private containerType: ContainerType;
-    private containerSize: ContainerSize;
+    private readonly block: Block;
+    private readonly containerType: ContainerType;
+    private readonly containerSize: ContainerSize;
     protected inventory: ContainerInventory;
     protected customName: string;
-    protected destructItems: boolean;
+    protected readonly destructItems: boolean;
 
     private transactionCallback: TransactionCallback;
     private containerCloseCallback: ContainerCloseCallback;
@@ -247,7 +247,7 @@ export class FakeContainer {
 
     /**
      * Callback is triggered when the player interacts with an item,
-     * in the container, or in it's inventory.
+     * in the container, or in its inventory.
      */
     public onTransaction(callback: TransactionCallback): void {
         this.transactionCallback = callback;
