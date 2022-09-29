@@ -12,7 +12,7 @@ export namespace PacketListener {
             if(PlayerManager.hasContainer(netId)) {
                 const container = PlayerManager.getContainer(netId)!;
                 packet.getRequestBatch().data.toArray().forEach((requestData) => {
-                    requestData.actions.toArray().forEach((action) => {
+                    requestData.getActions().toArray().forEach((action) => {
                         if(action instanceof ItemStackRequestActionTransferBase) {
                             if(container.callTransactionCallback(action) !== CANCEL) {
                                 /*
